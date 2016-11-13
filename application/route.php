@@ -25,8 +25,8 @@ return [
     'user/update/:id' => 'index/user/update',
     'user/delete/:id' => 'index/user/delete',
     'user/:id'        => 'index/user/read',
-    //第一单的内容
-    'hello/:name'     => 'index/index/hello',
+    //第二单的内容
+    // 'hello/[:name]'     => 'index/index/hello',
     'blog/:year/:month' => ['blog/archive', ['method' => 'get'], ['year' => '\d{4}', 'month' => '\d{2}']],
     'blog/:id'          => ['blog/get', ['method' => 'get'], ['id' => '\d+']],
     'blog/:name'        => ['blog/read', ['method' => 'get'], ['name' => '\w+']],
