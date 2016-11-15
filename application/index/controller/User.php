@@ -2,20 +2,18 @@
 namespace app\index\controller;
 
 use app\index\model\User as UserModel;
+use app\index\model\Book;
+use app\index\model\Role;
 use app\index\model\Profile;
 
 class User {
 
 	public function index() {
-		$list = UserModel::where('id','<',15)->select();
-  	foreach ($list as $user) {
-  		echo $user->id.'<br/>';
-  		echo $user->nickname.'<br/>';
-  		echo $user->email.'<br/>';
-  		echo $user->birthday.'<br/>';
-  		echo $user->status.'<br/>';
-  		echo '-----------------------------------<br/>';
-  	}
+		$list = UserModel::all();
+		$this->assign('list',$list);
+		$this->assign('count',count($list));
+		return $this->fetch();
+  	
 	}
 
 	public function update($id) {
@@ -76,5 +74,43 @@ class User {
 
 	public function create() {
 		return view();
+	}
+
+	public function delete($id) {
+		$user = UserModel::get($id);
+		if($user->delete()) {
+			$user->profile->delete();
+			return '用户[ '.$user->name.' ]删除成功!';
+		} else {
+			return $this->getError();
+		}
+	}
+
+
+	public function addBook() {
+		$user = UserModel::get(1);
+		$book = new Book;
+		$book->title = 'ThinkPHP快速入门';
+		$book->publish_time = '2016-05-14';
+		$user->books()->save($book);
+		return '添加Book成功。';
+
+	}
+
+
+	public function readBook() {
+		$user = UserModel::get(1,'books');
+		$books = $user->books;
+		dump($books);
+	}
+
+
+	public function addRole() {
+		$user = UserModel::getByNickname('张三');
+		$user->roles()->saveAll([
+        ['name' => 'leader', 'title' => '领导'],
+        ['name' => 'admin', 'title' => '管理员'],
+    ]);
+		return '用户角色新增成功';
 	}
 }

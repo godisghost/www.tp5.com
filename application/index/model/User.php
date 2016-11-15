@@ -12,4 +12,12 @@ class User extends Model{
 	public function profile() {
 		return $this->hasOne('Profile');
 	}
+
+	public function books() {
+		return $this->hasMany('book');
+	}
+
+	public function roles() {
+		return $this->belongsToMany('Role','think_access');
+	}
 }
